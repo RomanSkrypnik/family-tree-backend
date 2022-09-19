@@ -16,7 +16,7 @@ const config: OrmConfig = {
 
   entities: [__dirname + '/**/*.entity{.ts,.js}'],
   migrations: [__dirname + '/db/migrations/*{.ts,.js}'],
-  seeds: [__dirname + '/db/seeders/*.seed{.ts,.js}'],
+  seeds: [__dirname + '/db/seeders/initial.seed.ts'],
   factories: [__dirname + '/db/factories/*.factory{.ts,.js}'],
 
   cli: {

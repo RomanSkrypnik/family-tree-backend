@@ -4,14 +4,14 @@ import {
   JoinColumn,
   ManyToOne,
   OneToOne,
-  PrimaryColumn,
+  PrimaryGeneratedColumn,
 } from 'typeorm';
 import { Couple } from '../couple/couple.entity';
 import { Member } from '../member/member.entity';
 
 @Entity({ name: 'children' })
 export class Children {
-  @PrimaryColumn()
+  @PrimaryGeneratedColumn()
   id: number;
 
   @Column()

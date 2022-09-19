@@ -1,4 +1,4 @@
-import { Entity, ManyToOne, PrimaryColumn } from 'typeorm';
+import { Column, Entity, JoinColumn, OneToOne, PrimaryColumn } from 'typeorm';
 import { Member } from '../member/member.entity';
 
 @Entity({ name: 'couples' })
@@ -6,9 +6,17 @@ export class Couple {
   @PrimaryColumn()
   id: number;
 
-  @ManyToOne((type) => Member, (member) => member.id)
+  @Column()
+  user1Id: number;
+
+  @Column()
+  user2Id: number;
+
+  @OneToOne((type) => Member, (member) => member.id)
+  @JoinColumn()
   user1: Member;
 
-  @ManyToOne((type) => Member, (member) => member.id)
+  @OneToOne((type) => Member, (member) => member.id)
+  @JoinColumn()
   user2: Member;
 }

@@ -5,11 +5,11 @@ import { Repository } from 'typeorm';
 
 @Injectable()
 export class MemberService {
-    constructor(
-        @InjectRepository(Member) private memberRepository: Repository<Member>,
-    ) {}
+  constructor(
+    @InjectRepository(Member) private memberRepository: Repository<Member>,
+  ) {}
 
-    async getAll(): Promise<Member[]> {
-        return this.memberRepository.find();
-    }
+  async getAll(): Promise<Member[]> {
+    return await this.memberRepository.find();
+  }
 }

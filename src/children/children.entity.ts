@@ -20,7 +20,7 @@ export class Children {
   @Column()
   memberId: number;
 
-  @ManyToOne((type) => Couple, (couple) => couple.id)
+  @ManyToOne((type) => Couple, (couple) => couple.children)
   couple: Couple;
 
   @OneToOne(() => Member)

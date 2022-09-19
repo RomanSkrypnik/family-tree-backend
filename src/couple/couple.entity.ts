@@ -1,5 +1,13 @@
-import { Column, Entity, JoinColumn, OneToOne, PrimaryGeneratedColumn } from 'typeorm';
+import {
+  Column,
+  Entity,
+  JoinColumn,
+  OneToMany,
+  OneToOne,
+  PrimaryGeneratedColumn,
+} from 'typeorm';
 import { Member } from '../member/member.entity';
+import { Children } from '../children/children.entity';
 
 @Entity({ name: 'couples' })
 export class Couple {
@@ -12,11 +20,14 @@ export class Couple {
   @Column()
   user2Id: number;
 
-  @OneToOne((type) => Member, (member) => member.id)
+  @OneToOne(() => Member)
   @JoinColumn()
   user1: Member;
 
-  @OneToOne((type) => Member, (member) => member.id)
+  @OneToOne(() => Member)
   @JoinColumn()
   user2: Member;
+
+  @OneToMany(() => Children, (children) => children.couple)
+  children: Children[];
 }

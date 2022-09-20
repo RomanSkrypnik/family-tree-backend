@@ -10,6 +10,6 @@ export class MemberService {
   ) {}
 
   async getAll(): Promise<Member[]> {
-    return await this.memberRepository.find();
+    return await this.memberRepository.find({ relations: ['couple1'] });
   }
 }

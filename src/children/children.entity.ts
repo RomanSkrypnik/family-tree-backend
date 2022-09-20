@@ -6,7 +6,6 @@ import {
   OneToOne,
   PrimaryGeneratedColumn,
 } from 'typeorm';
-import { Couple } from '../couple/couple.entity';
 import { Member } from '../member/member.entity';
 
 @Entity({ name: 'children' })
@@ -15,15 +14,15 @@ export class Children {
   id: number;
 
   @Column()
-  coupleId: number;
+  parentId: number;
 
   @Column()
-  memberId: number;
-
-  @ManyToOne((type) => Couple, (couple) => couple.children)
-  couple: Couple;
+  childrenId: number;
 
   @OneToOne(() => Member)
   @JoinColumn()
-  member: Member;
+  children: Member;
+
+  @ManyToOne((type) => Member, (member) => member.id)
+  parent: Member;
 }

@@ -32,15 +32,15 @@ export default class InitialDatabaseSeed implements Seeder {
       .values([
         {
           parentId: 1,
-          childrenId: 2,
+          userId: 2,
         },
         {
           parentId: 2,
-          childrenId: 3,
+          userId: 3,
         },
         {
           parentId: 3,
-          childrenId: 4,
+          userId: 4,
         },
       ])
       .execute();

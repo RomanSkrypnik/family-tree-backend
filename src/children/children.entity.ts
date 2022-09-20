@@ -2,7 +2,6 @@ import {
   Column,
   Entity,
   JoinColumn,
-  ManyToOne,
   OneToOne,
   PrimaryGeneratedColumn,
 } from 'typeorm';
@@ -13,16 +12,17 @@ export class Children {
   @PrimaryGeneratedColumn()
   id: number;
 
-  @Column()
+  @Column({ select: false })
   parentId: number;
 
   @Column()
-  childrenId: number;
+  userId: number;
+
+  @OneToOne((type) => Member)
+  @JoinColumn()
+  parent: Member;
 
   @OneToOne(() => Member)
   @JoinColumn()
-  children: Member;
-
-  @ManyToOne((type) => Member, (member) => member.id)
-  parent: Member;
+  user: Member;
 }

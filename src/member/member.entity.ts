@@ -2,8 +2,7 @@ import {
   Entity,
   PrimaryGeneratedColumn,
   Column,
-  OneToOne,
-  ManyToOne,
+  ManyToOne, OneToMany,
 } from 'typeorm';
 import { Children } from '../children/children.entity';
 import { Branch } from '../branch/branch.entity';
@@ -22,7 +21,7 @@ export class Member {
   @Column()
   branchId: number;
 
-  @OneToOne((type) => Children, (children) => children.parent, {
+  @OneToMany((type) => Children, (children) => children.parent, {
     onDelete: 'CASCADE',
   })
   children: Children;

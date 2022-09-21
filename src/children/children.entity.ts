@@ -1,7 +1,7 @@
 import {
   Column,
   Entity,
-  JoinColumn,
+  JoinColumn, ManyToOne,
   OneToOne,
   PrimaryGeneratedColumn,
 } from 'typeorm';
@@ -18,8 +18,7 @@ export class Children {
   @Column()
   userId: number;
 
-  @OneToOne((type) => Member)
-  @JoinColumn()
+  @ManyToOne((type) => Member, (member) => member.children)
   parent: Member;
 
   @OneToOne(() => Member)

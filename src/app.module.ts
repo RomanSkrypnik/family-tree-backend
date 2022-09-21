@@ -4,6 +4,7 @@ import { ConfigModule } from '@nestjs/config';
 import config from './ormconfig';
 import MemberModule from './member/member.module';
 import ChildrenModule from './children/children.module';
+import BranchModule from './branch/branch.module';
 
 @Module({
   imports: [
@@ -11,6 +12,7 @@ import ChildrenModule from './children/children.module';
     TypeOrmModule.forRoot(config),
     MemberModule,
     ChildrenModule,
+    BranchModule,
   ],
   controllers: [],
 })

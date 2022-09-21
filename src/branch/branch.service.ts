@@ -10,6 +10,8 @@ export class BranchService {
   ) {}
 
   async getAll() {
-    return await this.branchRepository.find({ relations: ['members'] });
+    return await this.branchRepository.find({
+      relations: ['members', 'members.children'],
+    });
   }
 }

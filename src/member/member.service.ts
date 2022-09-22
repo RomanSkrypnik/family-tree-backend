@@ -6,23 +6,24 @@ import { CreateMemberDto, UpdateMemberDto } from './member.dto';
 
 @Injectable()
 export class MemberService {
-  constructor(
-    @InjectRepository(Member) private memberRepository: Repository<Member>,
-  ) {}
+    constructor(
+        @InjectRepository(Member) private memberRepository: Repository<Member>,
+    ) {
+    }
 
-  async getAll(): Promise<Member[]> {
-    return await this.memberRepository.find({ relations: ['children'] });
-  }
+    async getAll(): Promise<Member[]> {
+        return await this.memberRepository.find({ relations: ['children'], order: { birth: 'DESC' } });
+    }
 
-  async create(dto: CreateMemberDto) {
-    return await this.memberRepository.save(dto);
-  }
+    async create(dto: CreateMemberDto) {
+        return await this.memberRepository.save(dto);
+    }
 
-  async delete(id: string) {
-    return await this.memberRepository.delete(id);
-  }
+    async delete(id: string) {
+        return await this.memberRepository.delete(id);
+    }
 
-  async update(dto: UpdateMemberDto) {
-    return await this.memberRepository.save(dto);
-  }
+    async update(dto: UpdateMemberDto) {
+        return await this.memberRepository.save(dto);
+    }
 }

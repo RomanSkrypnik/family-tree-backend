@@ -6,14 +6,14 @@ import { CreateMemberDto, UpdateMemberDto } from './member.dto';
 
 @Injectable()
 export class MemberService {
-  private categoryRepository = getTreeRepository(Member);
+  private memberTreeRepository = getTreeRepository(Member);
 
   constructor(
     @InjectRepository(Member) private memberRepository: Repository<Member>,
   ) {}
 
   async getAll(): Promise<Member[]> {
-    return await this.categoryRepository.findTrees();
+    return await this.memberTreeRepository.findTrees();
   }
 
   async create(dto: CreateMemberDto) {

@@ -22,6 +22,6 @@ export class Member {
   @TreeChildren()
   children: Member[];
 
-  @TreeParent()
+  @TreeParent({ onDelete: 'CASCADE' })
   parent: Member;
 }

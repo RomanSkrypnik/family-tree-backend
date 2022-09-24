@@ -5,4 +5,5 @@ export interface CreateMemberDto {
 export interface UpdateMemberDto {
   id: number;
   name: string;
+  birth: string;
 }

@@ -1,25 +1,22 @@
 import {
-  Entity,
-  PrimaryGeneratedColumn,
-  Column,
-  OneToMany,
+    Entity,
+    PrimaryGeneratedColumn,
+    Column,
+    OneToMany,
 } from 'typeorm';
 import { Children } from '../children/children.entity';
 
 @Entity({ name: 'members' })
 export class Member {
-  @PrimaryGeneratedColumn()
-  id: number;
+    @PrimaryGeneratedColumn()
+    id: number;
 
-  @Column()
-  name: string;
+    @Column()
+    name: string;
 
-  @Column('date')
-  birth: Date;
+    @Column('date')
+    birth: Date;
 
-  @Column()
-  branchId: number;
-
-  @OneToMany((type) => Children, (children) => children.parent)
-  children: Children;
+    @OneToMany((type) => Children, (children) => children.parent)
+    children: Children;
 }

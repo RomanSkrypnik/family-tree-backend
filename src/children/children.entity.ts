@@ -19,10 +19,10 @@ export class Children {
     @Column()
     userId: number;
 
-    @ManyToOne((type) => Member, (member) => member.children, { onDelete: 'CASCADE', orphanedRowAction: 'delete', })
+    @ManyToOne((type) => Member, (member) => member.children, { onDelete: 'CASCADE', })
     parent: Member;
 
-    @OneToOne(() => Member, { onDelete: 'CASCADE', orphanedRowAction: 'delete', })
+    @OneToOne(() => Member, { onDelete: 'CASCADE' })
     @JoinColumn()
     user: Member;
 }

@@ -1,20 +1,19 @@
 import { Injectable } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
 import { Member } from './member.entity';
-import { Repository } from 'typeorm';
+import { getTreeRepository, Repository } from 'typeorm';
 import { CreateMemberDto, UpdateMemberDto } from './member.dto';
 
 @Injectable()
 export class MemberService {
+  private categoryRepository = getTreeRepository(Member);
+
   constructor(
     @InjectRepository(Member) private memberRepository: Repository<Member>,
   ) {}
 
   async getAll(): Promise<Member[]> {
-    return await this.memberRepository.find({
-      relations: ['children'],
-      order: { birth: 'DESC' },
-    });
+    return await this.categoryRepository.findTrees();
   }
 
   async create(dto: CreateMemberDto) {

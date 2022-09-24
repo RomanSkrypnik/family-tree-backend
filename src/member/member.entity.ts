@@ -1,22 +1,27 @@
 import {
-    Entity,
-    PrimaryGeneratedColumn,
-    Column,
-    OneToMany,
+  Entity,
+  PrimaryGeneratedColumn,
+  Column,
+  Tree,
+  TreeChildren,
+  TreeParent,
 } from 'typeorm';
-import { Children } from '../children/children.entity';
 
 @Entity({ name: 'members' })
+@Tree('materialized-path')
 export class Member {
-    @PrimaryGeneratedColumn()
-    id: number;
+  @PrimaryGeneratedColumn()
+  id: number;
 
-    @Column()
-    name: string;
+  @Column()
+  name: string;
 
-    @Column('date')
-    birth: Date;
+  @Column('date')
+  birth: Date;
 
-    @OneToMany((type) => Children, (children) => children.parent)
-    children: Children;
+  @TreeChildren()
+  children: Member[];
+
+  @TreeParent()
+  parent: Member;
 }

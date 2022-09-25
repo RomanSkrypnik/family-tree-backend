@@ -7,3 +7,9 @@ export interface UpdateMemberDto {
   name: string;
   birth: string;
 }
+
+export interface CreateChildMemberDto {
+  parentId: number;
+  name: string;
+  birth: string;
+}

@@ -16,9 +16,12 @@ export class MemberService {
     @InjectRepository(Member) private memberRepository: Repository<Member>,
   ) {}
 
-  async getAll() {
-    return await this.getRoot(4);
-    // return await this.memberTreeRepository.findTrees();
+  async get() {
+    return await this.memberRepository.find();
+  }
+
+  async getTrees() {
+    return await this.memberTreeRepository.findTrees();
   }
 
   async create(dto: CreateMemberDto) {

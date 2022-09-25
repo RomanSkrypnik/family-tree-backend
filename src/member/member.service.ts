@@ -32,10 +32,7 @@ export class MemberService {
     child.parent = parent;
     await this.memberTreeRepository.save(child);
     const grandparent = await this.findGrandparent(parent);
-    if (grandparent) {
-      return { ...child, parent, grandparent };
-    }
-    return child;
+    return grandparent ? { ...child, parent, grandparent } : child;
   }
 
   async delete(id: string): Promise<Member[]> {

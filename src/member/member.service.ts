@@ -16,8 +16,9 @@ export class MemberService {
     @InjectRepository(Member) private memberRepository: Repository<Member>,
   ) {}
 
-  async getAll(): Promise<Member[]> {
-    return await this.memberTreeRepository.findTrees();
+  async getAll() {
+    return await this.getRoot(4);
+    // return await this.memberTreeRepository.findTrees();
   }
 
   async create(dto: CreateMemberDto) {
@@ -31,8 +32,8 @@ export class MemberService {
     child.birth = new Date(dto.birth);
     child.parent = parent;
     await this.memberTreeRepository.save(child);
-    const grandparent = await this.findGrandparent(parent);
-    return grandparent ? { ...child, parent, grandparent } : child;
+    const root = await this.getRoot(child.id);
+    return { ...child, root };
   }
 
   async delete(id: string): Promise<Member[]> {
@@ -57,8 +58,12 @@ export class MemberService {
     return member;
   }
 
-  private async findGrandparent(child: Member): Promise<Member | null> {
-    const ancestors = await this.memberTreeRepository.findAncestors(child);
-    return ancestors.length > 0 ? ancestors[0] : null;
+  private async getRoot(memberId: number | string) {
+    const root = await this.memberTreeRepository.query(
+      `SELECT * FROM members_closure WHERE id_descendant=${memberId} AND id_ancestor!=${memberId} LIMIT 1`,
+    );
+    return root[0]
+      ? await this.memberRepository.findOne(root[0]['id_ancestor'])
+      : null;
   }
 }

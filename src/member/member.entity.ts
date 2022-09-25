@@ -8,7 +8,7 @@ import {
 } from 'typeorm';
 
 @Entity({ name: 'members' })
-@Tree('materialized-path')
+@Tree('closure-table')
 export class Member {
   @PrimaryGeneratedColumn()
   id: number;

@@ -34,6 +34,9 @@ $ npm install
 
 ## Preparing the app
 ```bash
+1. fill out your .env file from .env.example
+2. create database
+
 # migrate
 $ npm run migration:migrate
 

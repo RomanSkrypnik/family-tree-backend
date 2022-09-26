@@ -35,23 +35,23 @@ export class MemberService {
     const parent = await this.getMember(parentId);
     const body = { children: [], parent, birth: new Date(birth), name };
     const child = await this.memberTreeRepository.save(body);
-    const { id: rootId } = await this.getRoot(child.id);
+    const rootId = await this.getRootId(child.id);
     return { ...child, rootId, parent, children: [] };
   }
 
   async delete(memberId: string) {
     const member = await this.getMember(memberId);
-    const root = await this.getRoot(memberId);
+    const rootId = await this.getRootId(memberId);
     await this.memberRepository.delete(memberId);
-    return { id: member.id, rootId: root?.id ?? member.id };
+    return { id: member.id, rootId: rootId ?? member.id };
   }
 
   async update(dto: UpdateMemberDto) {
     await this.getMember(dto.id);
     const body = { ...dto, birth: new Date(dto.birth) };
     const member = await this.memberRepository.save(body);
-    const root = await this.getRoot(member.id);
-    return { ...member, rootId: root?.id ?? member.id };
+    const rootId = await this.getRootId(member.id);
+    return { ...member, rootId: rootId ?? member.id };
   }
 
   private async getMember(id: number | string) {
@@ -64,12 +64,9 @@ export class MemberService {
     return member;
   }
 
-  private async getRoot(memberId: number | string): Promise<Member | null> {
-    const root = await this.memberTreeRepository.query(
-      `SELECT id_ancestor FROM members_closure WHERE id_descendant=${memberId} AND id_ancestor!=${memberId} LIMIT 1`,
-    );
-    return root[0]
-      ? await this.memberRepository.findOne(root[0]['id_ancestor'])
-      : null;
+  private async getRootId(memberId: number | string): Promise<number | null> {
+    const query = `SELECT members.* FROM members_closure INNER JOIN members ON members_closure.id_ancestor=members.id WHERE id_descendant=${memberId} AND id_ancestor!=${memberId} LIMIT 1`;
+    const root = await this.memberTreeRepository.query(query);
+    return root[0] ? root[0].id : null;
   }
 }

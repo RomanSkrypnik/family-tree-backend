@@ -20,6 +20,10 @@ export class MemberService {
     return await this.memberRepository.find();
   }
 
+  async getOne(id: string | number) {
+    return await this.memberRepository.findOne(id);
+  }
+
   async getTrees() {
     return await this.memberTreeRepository.findTrees();
   }
@@ -28,15 +32,13 @@ export class MemberService {
     return await this.memberRepository.save(dto);
   }
 
-  async createChild(dto: CreateChildMemberDto) {
-    const parent = await this.findMember(dto.parentId);
-    const child = new Member();
-    child.name = dto.name;
-    child.birth = new Date(dto.birth);
-    child.parent = parent;
-    await this.memberTreeRepository.save(child);
-    const root = await this.getRoot(child.id);
-    return { ...child, root };
+  async createChild({ parentId, birth, name }: CreateChildMemberDto) {
+    const parent = await this.findMember(parentId);
+    const body = { children: [], parent, birth: new Date(birth), name };
+    const { id } = await this.memberTreeRepository.save(body);
+    const root = await this.getRoot(id);
+    const formattedChild = await this.getOne(id);
+    return { ...formattedChild, root, parent, children: [] };
   }
 
   async delete(id: string): Promise<Member[]> {
@@ -63,7 +65,7 @@ export class MemberService {
 
   private async getRoot(memberId: number | string) {
     const root = await this.memberTreeRepository.query(
-      `SELECT * FROM members_closure WHERE id_descendant=${memberId} AND id_ancestor!=${memberId} LIMIT 1`,
+      `SELECT id_ancestor FROM members_closure WHERE id_descendant=${memberId} AND id_ancestor!=${memberId} LIMIT 1`,
     );
     return root[0]
       ? await this.memberRepository.findOne(root[0]['id_ancestor'])

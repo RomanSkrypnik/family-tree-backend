@@ -13,7 +13,7 @@ export default class InitialDatabaseSeed implements Seeder {
 
     const parent = new Member();
     parent.name = 'Skrypnik V.V.';
-    parent.birth = new Date(1967, 1, 1);
+    // parent.birth = new Date(1967, 1, 1);
     parent.parent = grandparent;
     await memberTreeRepository.save(parent);
 

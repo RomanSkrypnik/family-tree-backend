@@ -2,6 +2,7 @@ import { HttpException, HttpStatus, Injectable } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
 import { Member } from './member.entity';
 import { getTreeRepository, Repository } from 'typeorm';
+
 import {
   CreateChildMemberDto,
   CreateMemberDto,
@@ -20,40 +21,40 @@ export class MemberService {
     return await this.memberRepository.find();
   }
 
-  async getOne(id: string | number) {
-    return await this.memberRepository.findOne(id);
-  }
-
   async getTrees() {
     return await this.memberTreeRepository.findTrees();
   }
 
   async create(dto: CreateMemberDto) {
-    return await this.memberRepository.save(dto);
+    const birth = new Date(dto.birth);
+    const member = await this.memberRepository.save({ ...dto, birth });
+    return { ...member, children: [] };
   }
 
   async createChild({ parentId, birth, name }: CreateChildMemberDto) {
-    const parent = await this.findMember(parentId);
+    const parent = await this.getMember(parentId);
     const body = { children: [], parent, birth: new Date(birth), name };
-    const { id } = await this.memberTreeRepository.save(body);
-    const root = await this.getRoot(id);
-    const formattedChild = await this.getOne(id);
-    return { ...formattedChild, root, parent, children: [] };
+    const child = await this.memberTreeRepository.save(body);
+    const { id: rootId } = await this.getRoot(child.id);
+    return { ...child, rootId, parent, children: [] };
   }
 
-  async delete(id: string): Promise<Member[]> {
-    const member = await this.findMember(id);
-    const ancestors = await this.memberTreeRepository.findAncestors(member);
-    await this.memberRepository.delete(id);
-    return ancestors;
+  async delete(memberId: string) {
+    const member = await this.getMember(memberId);
+    const { id: rootId } = await this.getRoot(memberId);
+    await this.memberRepository.delete(memberId);
+    return { id: member.id, rootId: rootId ?? member.id };
   }
 
   async update(dto: UpdateMemberDto) {
-    await this.findMember(dto.id);
-    return await this.memberRepository.save(dto);
+    await this.getMember(dto.id);
+    const body = { ...dto, birth: new Date(dto.birth) };
+    const member = await this.memberRepository.save(body);
+    const { id: rootId } = await this.getRoot(member.id);
+    return { ...member, rootId };
   }
 
-  private async findMember(id: number | string) {
+  private async getMember(id: number | string) {
     const member = await this.memberRepository.findOne(id);
 
     if (!member) {

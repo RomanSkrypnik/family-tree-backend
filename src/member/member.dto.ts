@@ -1,5 +1,6 @@
 export interface CreateMemberDto {
   name: string;
+  birth: string;
 }
 
 export interface UpdateMemberDto {

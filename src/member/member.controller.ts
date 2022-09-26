@@ -46,8 +46,8 @@ export class MemberController {
 
   @Delete(':id')
   async delete(@Param('id') id: string, @Res() res: Response) {
-    await this.memberService.delete(id);
-    res.json(id);
+    const member = await this.memberService.delete(id);
+    res.json(member);
   }
 
   @Patch()

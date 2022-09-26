@@ -41,17 +41,17 @@ export class MemberService {
 
   async delete(memberId: string) {
     const member = await this.getMember(memberId);
-    const { id: rootId } = await this.getRoot(memberId);
+    const root = await this.getRoot(memberId);
     await this.memberRepository.delete(memberId);
-    return { id: member.id, rootId: rootId ?? member.id };
+    return { id: member.id, rootId: root?.id ?? member.id };
   }
 
   async update(dto: UpdateMemberDto) {
     await this.getMember(dto.id);
     const body = { ...dto, birth: new Date(dto.birth) };
     const member = await this.memberRepository.save(body);
-    const { id: rootId } = await this.getRoot(member.id);
-    return { ...member, rootId };
+    const root = await this.getRoot(member.id);
+    return { ...member, rootId: root?.id ?? member.id };
   }
 
   private async getMember(id: number | string) {
@@ -64,7 +64,7 @@ export class MemberService {
     return member;
   }
 
-  private async getRoot(memberId: number | string) {
+  private async getRoot(memberId: number | string): Promise<Member | null> {
     const root = await this.memberTreeRepository.query(
       `SELECT id_ancestor FROM members_closure WHERE id_descendant=${memberId} AND id_ancestor!=${memberId} LIMIT 1`,
     );

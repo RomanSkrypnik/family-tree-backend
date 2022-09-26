@@ -32,6 +32,15 @@
 $ npm install
 ```
 
+## Preparing the app
+```bash
+# migrate
+$ npm run migration:migrate
+
+# seed
+$ npm run seed:run
+```
+
 ## Running the app
 
 ```bash
@@ -45,18 +54,15 @@ $ npm run start:dev
 $ npm run start:prod
 ```
 
-## Test
-
+## Migrations
 ```bash
-# unit tests
-$ npm run test
+# rollback migration
+$ npm run migration:rollback
 
-# e2e tests
-$ npm run test:e2e
-
-# test coverage
-$ npm run test:cov
+# create migration
+$ npm run migration:create 'migration_name'
 ```
+
 
 ## Support
 
